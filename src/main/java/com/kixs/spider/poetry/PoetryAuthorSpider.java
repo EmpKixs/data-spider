@@ -9,5 +9,9 @@ package com.kixs.spider.poetry;
  */
 public class PoetryAuthorSpider {
 
-
+    public static void main(String[] args) throws Exception {
+        PoetryAuthorCrawler crawler = new PoetryAuthorCrawler("crawl", true);
+        /*start crawl with depth of 4*/
+        crawler.start(4);
+    }
 }
