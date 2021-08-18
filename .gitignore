@@ -4,7 +4,6 @@ target/
 !**/src/main/**
 !**/src/test/**
 
-
 ### STS ###
 .apt_generated
 .classpath
@@ -19,9 +18,6 @@ target/
 *.iws
 *.iml
 *.ipr
-.mvn
-mvnw
-mvnw.cmd
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,5 +29,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### log ###
+*.log
 
 crawl

@@ -1,0 +1,96 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: data-spider
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      filter:
+        stat:
+          log-slow-sql: true
+          merge-sql: false
+          slow-sql-millis: 1000
+      initial-size: 10
+      max-active: 100
+      max-pool-prepared-statement-per-connection-size: 20
+      max-wait: 60000
+      min-evictable-idle-time-millis: 300000
+      min-idle: 10
+      pool-prepared-statements: true
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      url: jdbc:mysql://127.0.0.1:3306/data-spider?characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: root
+  http:
+    converters:
+      preferred-json-mapper: gson
+mybatis:
+  mapper-locations: classpath:mappers/*xml
+  type-aliases-package: com.kixs.spider.entity
+  global-config:
+    # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: ID_WORKER_STR
+    # 字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    # 驼峰下划线转换
+    # db-column-underline：true
+    # mp2.3+ 全局表前缀 mp_
+    # table-prefix: mp_
+    # 刷新mapper 调试神器
+    refresh-mapper: true
+    # 数据库大写下划线转换
+    # capital-mode=true
+    # 逻辑删除配置（下面3个配置）
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    configuration:
+      # 配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+      map-underscore-to-camel-case: true
+      cache-enabled: false
+      call-setters-on-nulls: true
+      jdbc-type-for-null: 'null'
+
+#logger配置
+logging:
+  config: classpath:logback-spring.xml
+
+## Format to use when serializing Date objects.
+#spring.gson.date-format=
+#
+## Whether to disable the escaping of HTML characters such as '<', '>', etc.
+#spring.gson.disable-html-escaping=
+#
+## Whether to exclude inner classes during serialization.
+#spring.gson.disable-inner-class-serialization=
+#
+## Whether to enable serialization of complex map keys (i.e. non-primitives).
+#spring.gson.enable-complex-map-key-serialization= # Whether to enable serialization of complex map keys (i.e. non-primitives).
+#
+## Whether to exclude all fields from consideration for serialization or deserialization that do not have the "Expose" annotation.
+#spring.gson.exclude-fields-without-expose-annotation=
+#
+## Naming policy that should apply to an object's field during serialization and deserialization.
+#spring.gson.field-naming-policy=
+#
+## Whether to generate non executable JSON by prefixing the output with some special text.
+#spring.gson.generate-non-executable-json=
+#
+## Whether to be lenient about parsing JSON that doesn't conform to RFC 4627.
+#spring.gson.lenient=
+#
+## Serialization policy for Long and long types.
+#spring.gson.long-serialization-policy=
+#
+## Whether to output serialized JSON that fits in a page for pretty printing.
+#spring.gson.pretty-printing=
+#
+## Whether to serialize null fields.
+#spring.gson.serialize-nulls=
+

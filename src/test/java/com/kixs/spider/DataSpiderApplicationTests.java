@@ -1,13 +1,23 @@
 package com.kixs.spider;
 
-import org.junit.jupiter.api.Test;
+import com.kixs.spider.poetry.PoetryAuthorSpider;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+
+
+@RunWith(SpringRunner.class)
 @SpringBootTest
-class DataSpiderApplicationTests {
+public class DataSpiderApplicationTests {
+
+    @Resource
+    private PoetryAuthorSpider poetryAuthorSpider;
 
     @Test
-    void contextLoads() {
+    public void test() {
+        poetryAuthorSpider.crawl();
     }
-
 }
