@@ -27,8 +27,15 @@ public class PoetryAuthorSpider {
         pipeline.setPoetryAuthorDao(poetryAuthorDao);
 
         Spider.create(new PoetryAuthorCrawler())
-                .addUrl("https://so.gushiwen.cn/authors/")
+                .addUrl("https://www.shicimingju.com/category/all")
                 .addPipeline(pipeline)
+                .thread(5)
+                .run();
+    }
+
+    public static void main(String[] args) {
+        Spider.create(new PoetryAuthorCrawler())
+                .addUrl("https://www.shicimingju.com/category/all")
                 .thread(5)
                 .run();
     }
