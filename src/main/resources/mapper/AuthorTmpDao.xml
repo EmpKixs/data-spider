@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kixs.spider.dao.AuthorTmpDao">
+
+    <resultMap type="com.kixs.spider.entity.AuthorTmpEntity" id="AuthorTmpMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="aDynasty" column="a_dynasty" jdbcType="VARCHAR"/>
+        <result property="paDynasty" column="pa_dynasty" jdbcType="VARCHAR"/>
+        <result property="aDescription" column="a_description" jdbcType="VARCHAR"/>
+        <result property="paDescription" column="pa_description" jdbcType="VARCHAR"/>
+        <result property="aShortDescription" column="a_short_description" jdbcType="VARCHAR"/>
+        <result property="birthDate" column="birth_date" jdbcType="VARCHAR"/>
+        <result property="obitDate" column="obit_date" jdbcType="VARCHAR"/>
+        <result property="dynasty" column="dynasty" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="aId" column="a_id" jdbcType="VARCHAR"/>
+        <result property="paId" column="pa_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="AuthorTmpColumns">
+        id, name, a_dynasty, pa_dynasty, a_description, pa_description, a_short_description, birth_date, obit_date, dynasty, description, a_id, pa_id
+    </sql>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AuthorTmpMap">
+        SELECT
+        <include refid="AuthorTmpColumns"/>
+
+        FROM author_tmp
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="aDynasty != null and aDynasty != ''">
+                AND a_dynasty = #{aDynasty}
+            </if>
+            <if test="paDynasty != null and paDynasty != ''">
+                AND pa_dynasty = #{paDynasty}
+            </if>
+            <if test="aDescription != null and aDescription != ''">
+                AND a_description = #{aDescription}
+            </if>
+            <if test="paDescription != null and paDescription != ''">
+                AND pa_description = #{paDescription}
+            </if>
+            <if test="aShortDescription != null and aShortDescription != ''">
+                AND a_short_description = #{aShortDescription}
+            </if>
+            <if test="birthDate != null and birthDate != ''">
+                AND birth_date = #{birthDate}
+            </if>
+            <if test="obitDate != null and obitDate != ''">
+                AND obit_date = #{obitDate}
+            </if>
+            <if test="dynasty != null and dynasty != ''">
+                AND dynasty = #{dynasty}
+            </if>
+            <if test="description != null and description != ''">
+                AND description = #{description}
+            </if>
+            <if test="aId != null and aId != ''">
+                AND a_id = #{aId}
+            </if>
+            <if test="paId != null and paId != ''">
+                AND pa_id = #{paId}
+            </if>
+        </where>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="updateEntity">
+        UPDATE author_tmp
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="aDynasty != null and aDynasty != ''">
+                a_dynasty = #{aDynasty},
+            </if>
+            <if test="paDynasty != null and paDynasty != ''">
+                pa_dynasty = #{paDynasty},
+            </if>
+            <if test="aDescription != null and aDescription != ''">
+                a_description = #{aDescription},
+            </if>
+            <if test="paDescription != null and paDescription != ''">
+                pa_description = #{paDescription},
+            </if>
+            <if test="aShortDescription != null and aShortDescription != ''">
+                a_short_description = #{aShortDescription},
+            </if>
+            <if test="birthDate != null and birthDate != ''">
+                birth_date = #{birthDate},
+            </if>
+            <if test="obitDate != null and obitDate != ''">
+                obit_date = #{obitDate},
+            </if>
+            <if test="dynasty != null and dynasty != ''">
+                dynasty = #{dynasty},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="aId != null and aId != ''">
+                a_id = #{aId},
+            </if>
+            <if test="paId != null and paId != ''">
+                pa_id = #{paId},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

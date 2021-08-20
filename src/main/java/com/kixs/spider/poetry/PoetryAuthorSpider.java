@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 
 /**
  * 诗词作者信息爬取
@@ -25,6 +26,7 @@ public class PoetryAuthorSpider {
     public void crawl() {
         PoetryAuthorPipeline pipeline = new PoetryAuthorPipeline();
         pipeline.setPoetryAuthorDao(poetryAuthorDao);
+        pipeline.setVersion(LocalDate.now());
 
         Spider.create(new PoetryAuthorCrawler())
                 .addUrl("https://www.shicimingju.com/category/all")

@@ -22,8 +22,14 @@ public class PoetryAuthorPipeline implements Pipeline {
 
     private PoetryAuthorDao poetryAuthorDao;
 
+    private LocalDate version;
+
     public void setPoetryAuthorDao(PoetryAuthorDao poetryAuthorDao) {
         this.poetryAuthorDao = poetryAuthorDao;
+    }
+
+    public void setVersion(LocalDate version) {
+        this.version = version;
     }
 
     @Override
@@ -31,7 +37,7 @@ public class PoetryAuthorPipeline implements Pipeline {
         Object data = resultItems.get("author");
         if (Objects.nonNull(data)) {
             PoetryAuthorEntity author = (PoetryAuthorEntity) data;
-            author.setVersion(LocalDate.now());
+            author.setVersion(version);
             poetryAuthorDao.insert(author);
         }
     }
