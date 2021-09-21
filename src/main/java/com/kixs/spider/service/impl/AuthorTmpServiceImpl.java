@@ -4,6 +4,7 @@ import com.kixs.spider.dao.AuthorTmpDao;
 import com.kixs.spider.entity.AuthorTmpEntity;
 import com.kixs.spider.service.AuthorTmpService;
 import com.kixs.spider.utils.service.impl.BaseServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
  * @version v1.0.0
  * @since 2021/8/20 09:15
  */
+@Slf4j
 @Service("authorTmpService")
 public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTmpEntity> implements AuthorTmpService {
 
@@ -41,7 +43,8 @@ public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTm
     private final static Pattern pattern_190 = Pattern.compile("\\((.*?)～(.*?)\\)");
     private final static Pattern pattern_200 = Pattern.compile("（(.*?)---(.*?)）");
 
-    private final static Pattern pattern = Pattern.compile("[（|\\\\(](\\S{1,14})[－|—|\\\\-|～|一|―|~|-]{1,3}(\\S{1,14})[\\\\)|）]");
+    private final static Pattern pattern = Pattern.compile("[（|\\\\(](.*?)[―|－|—|\\\\-|～|~|-]{1,3}(.*?)[\\\\)|）|。]");
+    private final static Pattern pattern_2 = Pattern.compile("[（|\\\\(](\\S{1,14})至(\\S{1,14})[\\\\)|）]");
 
     private final static Pattern pattern_0 = Pattern.compile("（(.*?)至(.*?)）");
     // private final static Pattern pattern_7 = Pattern.compile("（(.*?)[—|－|-|～|至|——](.*?)）");
@@ -111,23 +114,13 @@ public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTm
             Matcher matcher = matcher1(description);
             // 若匹配成功，取首位匹配结果处理
             if (Objects.nonNull(matcher)) {
-                int count = matcher.groupCount();
-                String birthDate = null;
-                String obitDate = null;
-                if (count >= 2) {
-                    birthDate = matcher.group(1);
-                    obitDate = matcher.group(2);
-                    if (birthDate.length() > 13 || obitDate.length() > 13) {
-                        // 数据过长，异常不处理
-                        birthDate = null;
-                        obitDate = null;
-                    }
-                } else if (count == 1) {
-                    birthDate = matcher.group(1);
-                    if (birthDate.length() > 13) {
-                        // 数据过长，异常
-                        birthDate = null;
-                    }
+                String birthDate = matcher.group(1);
+                String obitDate = matcher.group(2);
+                if (Objects.nonNull(birthDate) && StringUtils.isBlank(birthDate)) {
+                    birthDate = "?";
+                }
+                if (Objects.nonNull(obitDate) && StringUtils.isBlank(obitDate)) {
+                    obitDate = "?";
                 }
                 author.setBirthDate(birthDate);
                 author.setObitDate(obitDate);
@@ -142,9 +135,13 @@ public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTm
 
         Matcher matcher;
         matcher = pattern.matcher(data);
-        if (matcher.find()) {
+        while (matcher.find()) {
             return matcher;
         }
+        /*matcher = pattern_2.matcher(data);
+        if (matcher.find()) {
+            return matcher;
+        }*/
         return null;
     }
 
@@ -207,8 +204,8 @@ public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTm
     }
 
     public static void main(String[] args) {
-        String data = "白珽（一二四八～一三二八），字廷玉，号湛渊、栖霞山人，钱塘（今浙江杭州）人。理宗景定元年（一二六○）入太学。度宗咸淳中以诗著，与同邑仇远合称仇白。宋亡，以教授生徒为业。后以荐为太平路学正，历常州路教授、江浙等处儒学副提举，以兰溪州判官致仕。元文宗天历元年卒，年八十一。有《湛渊集》八卷，已佚。清杭州沈嵩町辑为一卷。事见本集附录明宋濂《湛渊先生白公墓志铭》。　白珽诗，以影印文渊阁《四库全书》本为底本，与新辑集外诗合编为一卷。";
-        Pattern pattern = Pattern.compile("[（|\\\\(](\\S{1,14})[－|—|\\\\-|～|一|―|~|-]{1,3}(\\S{1,14})[\\\\)|）]");
+        String data = "王禹偁(chēng,954年-1001年)：北 宋白体诗人、散文家、史学家。字元之，济州钜野(今山东菏泽市巨野县)人。太平兴国八年进士，历任右 拾遗、左司谏、知制诰、翰林学士。敢于直言讽谏，因此屡受贬谪。宋 真宗即位，召还，复知制诰。后贬至黄州，故世称王黄州，后又迁蕲州病死。 王禹偁为北宋诗文革新运动的先驱，文学 韩愈、 柳宗元，诗崇 杜甫、 白居易，多反映社会现实，风格清新平易。词仅存一首，反映了作者积极用世的政治抱负，格调清新旷远。著有《小畜集》《五代史阙文》。";
+        Pattern pattern = Pattern.compile("[（|\\\\(](.*?)([―|－|—|\\\\-|～|~|-]{1,3})(.*?)[\\\\)|）|。]");
         Matcher matcher = pattern.matcher(data);
         while (matcher.find()) {
             System.out.println(matcher.group());
@@ -216,7 +213,7 @@ public class AuthorTmpServiceImpl extends BaseServiceImpl<AuthorTmpDao, AuthorTm
             if (count >= 2) {
                 System.out.println(matcher.group(1));
                 System.out.println(matcher.group(2));
-
+                System.out.println(matcher.group(3));
             } else if (count == 1) {
                 System.out.println(matcher.group(1));
             }
